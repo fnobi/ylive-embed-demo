@@ -11,6 +11,7 @@ import debowerify from 'debowerify';
 import jade from 'gulp-jade';
 import browserSync from 'browser-sync';
 import readConfig from 'read-config';
+import mocha from 'gulp-instant-mocha';
 
 
 // const
@@ -83,6 +84,15 @@ gulp.task('browser-sync', () => {
 });
 
 gulp.task('serve', gulp.series('browser-sync'));
+
+
+// test
+gulp.task('test', () => {
+    return gulp.src(`${DEST}/js/*Test.js`)
+        .pipe(mocha({
+            assertPath: 'node_modules/chai/chai.js'
+        }));
+});
 
 
 // default
