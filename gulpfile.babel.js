@@ -12,6 +12,7 @@ import pug from 'gulp-pug';
 import browserSync from 'browser-sync';
 import readConfig from 'read-config';
 import watch from 'gulp-watch';
+import validate from "gulp-html-validator";
 
 
 // const
@@ -75,6 +76,14 @@ gulp.task('browser-sync', () => {
 });
 
 gulp.task('serve', gulp.series('browser-sync'));
+
+
+// validate
+gulp.task('validate', () => {
+    return gulp.src(`${DEST}/index.html`)
+        .pipe(validate({ format: 'json' }))
+        .pipe(gulp.dest('validation'));
+});
 
 
 // default
