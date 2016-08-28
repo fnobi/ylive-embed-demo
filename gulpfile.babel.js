@@ -80,7 +80,7 @@ gulp.task('serve', gulp.series('browser-sync'));
 
 // validate
 gulp.task('validate', () => {
-    return gulp.src(`${DEST}/index.html`)
+    return gulp.src(`${DEST}/*.html`)
         .pipe(validate({ format: 'json' }))
         .pipe(gulp.dest('validation'));
 });
