@@ -12,6 +12,7 @@ import pug from 'gulp-pug';
 import browserSync from 'browser-sync';
 import readConfig from 'read-config';
 import watch from 'gulp-watch';
+import { gulp as imageEven } from 'image-even';
 
 
 // const
@@ -58,6 +59,14 @@ gulp.task('pug', () => {
 });
 
 gulp.task('html', gulp.series('pug'));
+
+
+// image
+gulp.task('image-even', () => {
+    return gulp.src(`${DEST}/img/*@2x.png`)
+        .pipe(imageEven())
+        .pipe(gulp.dest(`${DEST}/img`));
+});
 
 
 // serve
