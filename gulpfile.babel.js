@@ -64,8 +64,7 @@ gulp.task('html', gulp.series('pug'));
 // image
 gulp.task('image-even', () => {
     return gulp.src(`${DEST}/img/*@2x.png`)
-        .pipe(imageEven())
-        .pipe(gulp.dest(`${DEST}/img`));
+        .pipe(imageEven());
 });
 
 
@@ -85,6 +84,7 @@ gulp.task('browser-sync', () => {
         `${SRC}/pug/**/*.pug`,
         `${SRC}/config/meta.yml`
     ], gulp.series('pug', browserSync.reload));
+    watch([`${DEST}/img/*@2x.png`], gulp.series('image-even', browserSync.reload));
 });
 
 gulp.task('serve', gulp.series('browser-sync'));
