@@ -67,6 +67,8 @@ gulp.task('image-even', () => {
         .pipe(imageEven());
 });
 
+gulp.task('image', gulp.series('image-even'));
+
 
 // serve
 gulp.task('browser-sync', () => {
@@ -84,7 +86,6 @@ gulp.task('browser-sync', () => {
         `${SRC}/pug/**/*.pug`,
         `${SRC}/config/meta.yml`
     ], gulp.series('pug', browserSync.reload));
-    watch([`${DEST}/img/*@2x.png`], gulp.series('image-even', browserSync.reload));
 });
 
 gulp.task('serve', gulp.series('browser-sync'));
