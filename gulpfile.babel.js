@@ -12,7 +12,7 @@ import pug from 'gulp-pug';
 import browserSync from 'browser-sync';
 import readConfig from 'read-config';
 import watch from 'gulp-watch';
-import validate from "gulp-html-validator";
+import validate from 'gulp-html-validator';
 
 
 // const
