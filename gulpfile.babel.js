@@ -8,16 +8,19 @@ import pleeease from 'gulp-pleeease';
 import browserify from 'browserify';
 import babelify from 'babelify';
 import debowerify from 'debowerify';
-import jade from 'gulp-jade';
+import pug from 'gulp-pug';
 import browserSync from 'browser-sync';
 import readConfig from 'read-config';
 import mocha from 'gulp-instant-mocha';
+import watch from 'gulp-watch';
 
 
 // const
 const SRC = './src';
 const CONFIG = './src/config';
-const DEST = './public';
+const HTDOCS = './public';
+const BASE_PATH = '/';
+const DEST = `${HTDOCS}${BASE_PATH}`;
 
 
 // css
@@ -31,15 +34,7 @@ gulp.task('sass', () => {
 
 gulp.task('css', gulp.series('sass'));
 
-
 // js
-gulp.task('copy-bower', () => {
-    const config = readConfig(`${CONFIG}/copy-bower.json`);
-    return gulp.src(config.src, {
-        cwd: 'bower_components'
-    }).pipe(gulp.dest(`${DEST}/js/lib`));
-});
-
 gulp.task('browserify', () => {
     return browserify(`${SRC}/js/script.js`)
         .transform(babelify)
@@ -49,38 +44,39 @@ gulp.task('browserify', () => {
         .pipe(gulp.dest(`${DEST}/js`));
 });
 
-gulp.task('js', gulp.parallel('browserify', 'copy-bower'));
-
+gulp.task('js', gulp.parallel('browserify'));
 
 // html
-gulp.task('jade', () => {
-    const locals = readConfig(`${CONFIG}/meta.json`);
+gulp.task('pug', () => {
+    const locals = readConfig(`${CONFIG}/meta.yml`);
 
-    return gulp.src(`${SRC}/jade/*.jade`)
-        .pipe(jade({
+    return gulp.src(`${SRC}/pug/**/[!_]*.pug`)
+        .pipe(pug({
             locals: locals,
             pretty: true
         }))
         .pipe(gulp.dest(`${DEST}`));
 });
 
-gulp.task('html', gulp.series('jade'));
+gulp.task('html', gulp.series('pug'));
 
 
 // serve
 gulp.task('browser-sync', () => {
     browserSync({
         server: {
-            baseDir: DEST
-        }
+            baseDir: HTDOCS
+        },
+        startPath: BASE_PATH,
+        ghostMode: false
     });
 
-    gulp.watch([`${SRC}/scss/**/*.scss`], gulp.series('sass', browserSync.reload));
-    gulp.watch([`${SRC}/js/**/*.js`], gulp.series('browserify', browserSync.reload));
-    gulp.watch([
-        `${SRC}/jade/**/*.jade`,
-        `${SRC}/config/meta.json`
-    ], gulp.series('jade', browserSync.reload));
+    watch([`${SRC}/scss/**/*.scss`], gulp.series('sass', browserSync.reload));
+    watch([`${SRC}/js/**/*.js`], gulp.series('browserify', browserSync.reload));
+    watch([
+        `${SRC}/pug/**/*.pug`,
+        `${SRC}/config/meta.yml`
+    ], gulp.series('pug', browserSync.reload));
 });
 
 gulp.task('serve', gulp.series('browser-sync'));
