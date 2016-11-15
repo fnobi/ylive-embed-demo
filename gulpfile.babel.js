@@ -11,6 +11,7 @@ import debowerify from 'debowerify';
 import pug from 'gulp-pug';
 import browserSync from 'browser-sync';
 import readConfig from 'read-config';
+import mocha from 'gulp-instant-mocha';
 import watch from 'gulp-watch';
 import validate from 'gulp-html-validator';
 import { gulp as imageEven } from 'image-even';
@@ -22,6 +23,7 @@ const CONFIG = './src/config';
 const HTDOCS = './public';
 const BASE_PATH = '/';
 const DEST = `${HTDOCS}${BASE_PATH}`;
+const TEST = '.';
 
 
 // css
@@ -43,6 +45,15 @@ gulp.task('browserify', () => {
         .bundle()
         .pipe(source('script.js'))
         .pipe(gulp.dest(`${DEST}/js`));
+});
+
+gulp.task('browserify-test', () => {
+    return browserify(`${SRC}/js/test.js`)
+        .transform(babelify)
+        .transform(debowerify)
+        .bundle()
+        .pipe(source('tmp-test.js'))
+        .pipe(gulp.dest(TEST));
 });
 
 gulp.task('js', gulp.parallel('browserify'));
@@ -98,6 +109,18 @@ gulp.task('validate', () => {
         .pipe(validate({ format: 'json' }))
         .pipe(gulp.dest('validation'));
 });
+
+
+// test
+gulp.task('mocha', () => {
+    return gulp.src(`${TEST}/tmp-test.js`)
+        .pipe(mocha({
+            dest: `${TEST}/tmp-test.html`,
+            assertPath: 'node_modules/chai/chai.js'
+        }));
+});
+
+gulp.task('test', gulp.series('browserify-test', 'mocha'));
 
 
 // default

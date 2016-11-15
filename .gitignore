@@ -37,3 +37,7 @@ node_modules
 
 bower_components
 validation
+
+# test tmp file
+tmp-test.html
+tmp-test.js
