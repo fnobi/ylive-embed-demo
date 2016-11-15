@@ -36,3 +36,7 @@ node_modules
 .node_repl_history
 
 bower_components
+
+# test tmp file
+tmp-test.html
+tmp-test.js

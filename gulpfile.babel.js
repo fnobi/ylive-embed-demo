@@ -21,7 +21,7 @@ const CONFIG = './src/config';
 const HTDOCS = './public';
 const BASE_PATH = '/';
 const DEST = `${HTDOCS}${BASE_PATH}`;
-const TEST = `./.test`;
+const TEST = '.';
 
 
 // css
@@ -50,7 +50,7 @@ gulp.task('browserify-test', () => {
         .transform(babelify)
         .transform(debowerify)
         .bundle()
-        .pipe(source('test.js'))
+        .pipe(source('tmp-test.js'))
         .pipe(gulp.dest(TEST));
 });
 
@@ -94,8 +94,9 @@ gulp.task('serve', gulp.series('browser-sync'));
 
 // test
 gulp.task('mocha', () => {
-    return gulp.src(`${TEST}/test.js`)
+    return gulp.src(`${TEST}/tmp-test.js`)
         .pipe(mocha({
+            dest: `${TEST}/tmp-test.html`,
             assertPath: 'node_modules/chai/chai.js'
         }));
 });
