@@ -2546,9 +2546,9 @@ gulp-cli@^1.0.0:
     wreck "^6.3.0"
     yargs "^3.28.0"
 
-gulp-instant-mocha@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/gulp-instant-mocha/-/gulp-instant-mocha-1.0.3.tgz#66b217d5685fd45e6e7e14df8b2b0b4dc9aed846"
+gulp-instant-mocha@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/gulp-instant-mocha/-/gulp-instant-mocha-1.0.4.tgz#f0f76cd0b272cc4cb022134125508a79fc6d6a1a"
   dependencies:
     async "^1.5.0"
     gulp "^3.9.0"
