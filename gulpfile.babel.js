@@ -7,7 +7,6 @@ import sass from 'gulp-sass';
 import pleeease from 'gulp-pleeease';
 import browserify from 'browserify';
 import babelify from 'babelify';
-import debowerify from 'debowerify';
 import pug from 'gulp-pug';
 import browserSync from 'browser-sync';
 import readConfig from 'read-config';
@@ -15,6 +14,7 @@ import mocha from 'gulp-instant-mocha';
 import watch from 'gulp-watch';
 import validate from 'gulp-html-validator';
 import { gulp as imageEven } from 'image-even';
+import RevLogger from 'rev-logger';
 
 
 // const
@@ -24,6 +24,11 @@ const HTDOCS = './public';
 const BASE_PATH = '/';
 const DEST = `${HTDOCS}${BASE_PATH}`;
 const TEST = '.';
+
+const revLogger = new RevLogger({
+    'style.css': `${DEST}/css/style.css`,
+    'script.js': `${DEST}/js/script.js`
+});
 
 
 // css
@@ -41,7 +46,6 @@ gulp.task('css', gulp.series('sass'));
 gulp.task('browserify', () => {
     return browserify(`${SRC}/js/script.js`)
         .transform(babelify)
-        .transform(debowerify)
         .bundle()
         .pipe(source('script.js'))
         .pipe(gulp.dest(`${DEST}/js`));
@@ -61,7 +65,8 @@ gulp.task('js', gulp.parallel('browserify'));
 // html
 gulp.task('pug', () => {
     const locals = readConfig(`${CONFIG}/meta.yml`);
-
+    locals.versions = revLogger.versions();
+    
     return gulp.src(`${SRC}/pug/**/[!_]*.pug`)
         .pipe(pug({
             locals: locals,
@@ -98,6 +103,10 @@ gulp.task('browser-sync', () => {
         `${SRC}/pug/**/*.pug`,
         `${SRC}/config/meta.yml`
     ], gulp.series('pug', browserSync.reload));
+
+    revLogger.watch((changed) => {
+        gulp.series('pug', browserSync.reload)();
+    });
 });
 
 gulp.task('serve', gulp.series('browser-sync'));
