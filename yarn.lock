@@ -2307,6 +2307,14 @@ gulp-pug@^3.0.3:
     pug ">=2.0.0-alpha <3"
     through2 "^2.0.0"
 
+gulp-sass-glob@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/gulp-sass-glob/-/gulp-sass-glob-1.0.6.tgz#88b8b27e65422b6b02c51a18f1960fdccda73ee3"
+  dependencies:
+    glob "^7.0.0"
+    slash "^1.0.0"
+    through2 "^2.0.1"
+
 gulp-sass@2.1.*:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/gulp-sass/-/gulp-sass-2.1.1.tgz#6b266adbb36991992df8a3906a821392d0e2fe75"
