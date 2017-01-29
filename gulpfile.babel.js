@@ -22,7 +22,7 @@ import RevLogger from 'rev-logger';
 const SRC = './src';
 const CONFIG = './src/config';
 const HTDOCS = './public';
-const BASE_PATH = '/';
+const BASE_PATH = '';
 const DEST = `${HTDOCS}${BASE_PATH}`;
 const TEST = '.';
 
@@ -68,11 +68,13 @@ gulp.task('js', gulp.parallel('browserify'));
 gulp.task('pug', () => {
     const locals = readConfig(`${CONFIG}/meta.yml`);
     locals.versions = revLogger.versions();
+    locals.basePath = BASE_PATH;
     
     return gulp.src(`${SRC}/pug/**/[!_]*.pug`)
         .pipe(pug({
             locals: locals,
-            pretty: true
+            pretty: true,
+            basedir: `${SRC}/pug`
         }))
         .pipe(gulp.dest(`${DEST}`));
 });
@@ -95,7 +97,7 @@ gulp.task('browser-sync', () => {
         server: {
             baseDir: HTDOCS
         },
-        startPath: BASE_PATH,
+        startPath: `${BASE_PATH}/`,
         ghostMode: false
     });
 
