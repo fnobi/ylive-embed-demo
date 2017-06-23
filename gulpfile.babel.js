@@ -2,6 +2,7 @@
 
 // import
 import gulp from 'gulp';
+import gutil from 'gutil';
 import sass from 'gulp-sass';
 import sassGlob from 'gulp-sass-glob';
 import pleeease from 'gulp-pleeease';
@@ -49,6 +50,11 @@ gulp.task('watchify', () => {
                 .transform(babelify)
                 .bundle();
         }))
+        .on("error", function(err) {
+            gutil.log(err.message);
+            gutil.log(err.codeFrame);
+            this.emit('end');
+        })
         .pipe(gulp.dest(`${DEST}/js`));
 });
 
