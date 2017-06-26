@@ -26,7 +26,7 @@ const BASE_PATH = '';
 const DEST = `${HTDOCS}${BASE_PATH}`;
 
 const revLogger = new RevLogger({
-    'kayacHtml5Starter.js': `${DEST}/js/kayacHtml5Starter.js`,
+    'kayac-html5-starter.js': `${DEST}/js/kayac-html5-starter.js`,
     'style.css': `${DEST}/css/style.css`
 });
 
@@ -45,7 +45,7 @@ gulp.task('css', gulp.series('sass'));
 
 // js
 gulp.task('watchify', () => {
-    return gulp.src(`${SRC}/js/kayacHtml5Starter*`)
+    return gulp.src(`${SRC}/js/kayac-html5-starter*`)
         .pipe(transform((file) => {
             return watchify(browserify(file.path))
                 .transform(babelify)
