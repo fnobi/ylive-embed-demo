@@ -2,10 +2,11 @@
 
 // import
 import gulp from 'gulp';
-import source from 'vinyl-source-stream';
+import gutil from 'gutil';
 import sass from 'gulp-sass';
 import sassGlob from 'gulp-sass-glob';
 import pleeease from 'gulp-pleeease';
+import watchify from 'watchify';
 import browserify from 'browserify';
 import babelify from 'babelify';
 import pug from 'gulp-pug';
@@ -17,6 +18,8 @@ import validate from 'gulp-html-validator';
 import { gulp as imageEven } from 'image-even';
 import RevLogger from 'rev-logger';
 
+import transform from './lib/vinyl-transform';
+
 
 // const
 const SRC = './src';
@@ -27,8 +30,7 @@ const DEST = `${HTDOCS}${BASE_PATH}`;
 const TEST = '.';
 
 const revLogger = new RevLogger({
-    'style.css': `${DEST}/css/style.css`,
-    'script.js': `${DEST}/js/script.js`
+    'style.css': `${DEST}/css/style.css`
 });
 
 
@@ -45,24 +47,38 @@ gulp.task('sass', () => {
 gulp.task('css', gulp.series('sass'));
 
 // js
-gulp.task('browserify', () => {
-    return browserify(`${SRC}/js/script.js`)
-        .transform(babelify)
-        .bundle()
-        .pipe(source('script.js'))
+gulp.task('watchify', () => {
+    return gulp.src(`${SRC}/js/kayacHtml5Starter*`)
+        .pipe(transform((file) => {
+            return watchify(browserify(file.path))
+                .transform(babelify)
+                .bundle();
+        }))
+        .on("error", function(err) {
+            gutil.log(err.message);
+            gutil.log(err.codeFrame);
+            this.emit('end');
+        })
         .pipe(gulp.dest(`${DEST}/js`));
 });
 
-gulp.task('browserify-test', () => {
-    return browserify(`${SRC}/js/test.js`)
-        .transform(babelify)
-        .transform(debowerify)
-        .bundle()
-        .pipe(source('tmp-test.js'))
+gulp.task('watchify-test', () => {
+    return gulp.src(`${SRC}/js/test.js`)
+        .pipe(transform((file) => {
+            return watchify(browserify(file.path))
+                .transform(babelify)
+                .bundle();
+        }))
+        .on("error", function(err) {
+            gutil.log(err.message);
+            gutil.log(err.codeFrame);
+            this.emit('end');
+        })
         .pipe(gulp.dest(TEST));
 });
 
-gulp.task('js', gulp.parallel('browserify'));
+gulp.task('js', gulp.parallel('watchify'));
+
 
 // html
 gulp.task('pug', () => {
@@ -102,7 +118,7 @@ gulp.task('browser-sync', () => {
     });
 
     watch([`${SRC}/scss/**/*.scss`], gulp.series('sass', browserSync.reload));
-    watch([`${SRC}/js/**/*.js`], gulp.series('browserify', browserSync.reload));
+    watch([`${SRC}/js/**/*.js`], gulp.series('watchify', browserSync.reload));
     watch([
         `${SRC}/pug/**/*.pug`,
         `${SRC}/config/meta.yml`
@@ -126,7 +142,7 @@ gulp.task('validate', () => {
 
 // test
 gulp.task('mocha', () => {
-    return gulp.src(`${TEST}/tmp-test.js`)
+    return gulp.src(`${TEST}/test.js`)
         .pipe(mocha({
             dest: `${TEST}/tmp-test.html`,
             assertPath: 'node_modules/chai/chai.js'
