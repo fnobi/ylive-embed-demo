@@ -30,6 +30,7 @@ const DEST = `${HTDOCS}${BASE_PATH}`;
 const TEST = '.';
 
 const revLogger = new RevLogger({
+    'kayacHtml5Starter.js': `${DEST}/js/kayacHtml5Starter.js`,
     'style.css': `${DEST}/css/style.css`
 });
 
