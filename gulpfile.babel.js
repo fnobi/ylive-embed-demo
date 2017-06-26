@@ -150,7 +150,7 @@ gulp.task('mocha', () => {
         }));
 });
 
-gulp.task('test', gulp.series('browserify-test', 'mocha'));
+gulp.task('test', gulp.series('watchify-test', 'mocha'));
 
 
 // default
