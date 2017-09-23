@@ -24,8 +24,8 @@ import transform from './lib/vinyl-transform';
 // const
 const SRC = './src';
 const CONFIG = './src/config';
-const HTDOCS = '.';
-const BASE_PATH = '/demo';
+const HTDOCS = '..';
+const BASE_PATH = '/ylive-embed-demo/demo';
 const DEST = `${HTDOCS}${BASE_PATH}`;
 const TEST = '.';
 
