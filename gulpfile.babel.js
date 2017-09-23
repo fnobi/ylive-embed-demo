@@ -24,7 +24,7 @@ import transform from './lib/vinyl-transform';
 // const
 const SRC = './src';
 const CONFIG = './src/config';
-const HTDOCS = './public';
+const HTDOCS = './demo';
 const BASE_PATH = '';
 const DEST = `${HTDOCS}${BASE_PATH}`;
 const TEST = '.';
