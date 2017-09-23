@@ -30,7 +30,7 @@ const DEST = `${HTDOCS}${BASE_PATH}`;
 const TEST = '.';
 
 const revLogger = new RevLogger({
-    'kayac-html5-starter.js': `${DEST}/js/kayac-html5-starter.js`,
+    'ylive-embed-demo.js': `${DEST}/js/ylive-embed-demo.js`,
     'style.css': `${DEST}/css/style.css`
 });
 
@@ -49,7 +49,7 @@ gulp.task('css', gulp.series('sass'));
 
 // js
 gulp.task('watchify', () => {
-    return gulp.src(`${SRC}/js/kayac-html5-starter*`)
+    return gulp.src(`${SRC}/js/ylive-embed-demo*`)
         .pipe(transform((file) => {
             return watchify(browserify(file.path))
                 .transform(babelify)
